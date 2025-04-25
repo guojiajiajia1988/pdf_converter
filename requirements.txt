@@ -4,3 +4,4 @@ docx2pdf
 PyPDF2
 Pillow
 comtypes
+gunicorn
