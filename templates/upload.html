@@ -21,43 +21,35 @@
             color: #333;
         }
         .upload-section {
-            margin-top: 80px;
+            margin-top: 60px;
+        }
+        .btn-upload, .btn-convert {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 15px;
         }
         .btn-upload {
             background-color: #ff6600;
             color: white;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-bottom: 30px;
         }
         .btn-convert {
             background-color: #007bff;
             color: white;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
         }
         .uploaded-files {
-            margin-top: 30px;
+            margin-top: 20px;
             font-size: 1rem;
             color: #666;
         }
-        input[type="file"] {
-            display: none;
-        }
-        label {
-            display: inline-block;
-            background-color: #ff6600;
-            color: white;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
+        select {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
@@ -66,19 +58,32 @@
     <h1><b>Online Free Easy PDF Converter</b></h1>
 
     <form action="/upload" method="post" enctype="multipart/form-data" class="upload-section">
-        <label for="file-upload">Upload File</label>
-        <input type="file" id="file-upload" name="file" onchange="showFileName()">
-        <div class="uploaded-files" id="file-name"></div>
-        <br><br>
+        <label for="file-upload" class="btn-upload">Select Files</label>
+        <input type="file" id="file-upload" name="files" multiple onchange="showFileNames()" hidden>
+        
+        <div class="uploaded-files" id="file-names"></div>
+
+        <div>
+            <select name="conversion_type" required>
+                <option value="">-- Select Conversion Type --</option>
+                <option value="pdf_to_word">PDF to Word</option>
+                <option value="word_to_pdf">Word to PDF</option>
+                <option value="jpg_to_pdf">JPG to PDF</option>
+                <option value="merge_pdfs">Merge PDFs</option>
+            </select>
+        </div>
+
+        <br>
         <button type="submit" class="btn-convert">Convert</button>
     </form>
 
     <script>
-        function showFileName() {
+        function showFileNames() {
             const input = document.getElementById('file-upload');
-            const fileNameDiv = document.getElementById('file-name');
-            if (input.files.length > 0) {
-                fileNameDiv.innerText = "Selected: " + input.files[0].name;
+            const fileNamesDiv = document.getElementById('file-names');
+            fileNamesDiv.innerHTML = "";
+            for (let i = 0; i < input.files.length; i++) {
+                fileNamesDiv.innerHTML += input.files[i].name + "<br>";
             }
         }
     </script>
