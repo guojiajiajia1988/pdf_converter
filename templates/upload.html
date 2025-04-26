@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Online PDF Converter - Easy & Fast</title>
-    <meta name="description" content="Convert PDF to Word, Word to PDF, JPG to PDF online for free. Simple, fast, secure.">
-    <meta name="keywords" content="PDF converter, online PDF, PDF to Word, Word to PDF, JPG to PDF, free converter">
+    <meta name="description" content="Convert PDF to Word, Word to PDF, JPG to PDF, PPT to PDF, Merge PDFs online.">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
     <style>
         body {
@@ -59,15 +58,16 @@
 
     <form action="/upload" method="post" enctype="multipart/form-data" class="upload-section">
         <label for="file-upload" class="btn-upload">Select Files</label>
-        <input type="file" id="file-upload" name="files" multiple onchange="showFileNames()" hidden>
-        
+        <input type="file" id="file-upload" name="file" multiple onchange="showFileNames()" hidden>
+
         <div class="uploaded-files" id="file-names"></div>
 
         <div>
-            <select name="conversion_type" required>
+            <select name="operation" required>
                 <option value="">-- Select Conversion Type --</option>
                 <option value="pdf_to_word">PDF to Word</option>
                 <option value="word_to_pdf">Word to PDF</option>
+                <option value="ppt_to_pdf">PPT to PDF</option>
                 <option value="jpg_to_pdf">JPG to PDF</option>
                 <option value="merge_pdfs">Merge PDFs</option>
             </select>
