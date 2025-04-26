@@ -129,6 +129,12 @@ def upload_file():
                 zipf.write(file_path, arcname=os.path.basename(file_path))
 
         return send_file(zip_filename, as_attachment=True)
+from flask import send_from_directory
 
+# --- 新增：提供 sitemap.xml 文件 ---
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory(directory='.', path='sitemap.xml')
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)  # or just app.run()
