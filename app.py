@@ -33,7 +33,7 @@ def ppt_to_pdf(input_path, output_path):
     powerpoint = comtypes.client.CreateObject("Powerpoint.Application")
     powerpoint.Visible = 1
     deck = powerpoint.Presentations.Open(absolute_input_path, WithWindow=False)
-    deck.SaveAs(absolute_output_path, 32)  # 32 = pdf
+    deck.SaveAs(absolute_output_path, 32)
     deck.Close()
     powerpoint.Quit()
 
@@ -67,7 +67,7 @@ def upload_file():
     task_output_folder = os.path.join(OUTPUT_FOLDER, task_id)
     os.makedirs(task_output_folder, exist_ok=True)
 
-    output_files = []
+    converted_files = []
 
     if operation == "merge_pdfs":
         saved_files = []
@@ -81,7 +81,7 @@ def upload_file():
 
         output_pdf = os.path.join(task_output_folder, "merged_output.pdf")
         merge_pdfs(saved_files, output_pdf)
-        output_files.append(output_pdf)
+        converted_files.append(output_pdf)
 
     else:
         for file in files:
@@ -99,47 +99,43 @@ def upload_file():
             if operation == "pdf_to_word" and ext.lower() == '.pdf':
                 output_path = os.path.join(task_output_folder, output_filename + ".docx")
                 pdf_to_word(input_path, output_path)
-                output_files.append(output_path)
+                converted_files.append(output_path)
 
             elif operation == "word_to_pdf" and ext.lower() == '.docx':
                 output_path = os.path.join(task_output_folder, output_filename + ".pdf")
                 word_to_pdf(input_path, task_output_folder)
-                output_files.append(output_path)
+                converted_files.append(output_path)
 
             elif operation == "ppt_to_pdf" and ext.lower() in ['.ppt', '.pptx']:
                 output_path = os.path.join(task_output_folder, output_filename + ".pdf")
                 ppt_to_pdf(input_path, output_path)
-                output_files.append(output_path)
+                converted_files.append(output_path)
 
             elif operation == "jpg_to_pdf" and ext.lower() in ['.jpg', '.jpeg', '.png']:
                 output_path = os.path.join(task_output_folder, output_filename + ".pdf")
                 jpg_to_pdf(input_path, output_path)
-                output_files.append(output_path)
+                converted_files.append(output_path)
 
             else:
                 return f"Unsupported file format: {file.filename}"
 
-    if len(output_files) == 1:
-        return send_file(output_files[0], as_attachment=True)
+    if len(converted_files) == 1:
+        return send_file(converted_files[0], as_attachment=True)
 
-    # Zip only the converted files
     zip_filename = os.path.join(task_output_folder, "converted_files.zip")
     with zipfile.ZipFile(zip_filename, 'w') as zipf:
-        for file_path in output_files:
+        for file_path in converted_files:
             zipf.write(file_path, arcname=os.path.basename(file_path))
 
     return send_file(zip_filename, as_attachment=True)
 
-# --- 新增：提供 sitemap.xml 文件 ---
 @app.route('/sitemap.xml')
 def sitemap():
     return send_from_directory(directory='.', path='sitemap.xml')
 
-# --- 新增：提供 robots.txt 文件 ---
 @app.route('/robots.txt')
 def robots():
     return send_from_directory(directory='.', path='robots.txt')
 
-# --- 启动程序 ---    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
