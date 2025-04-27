@@ -27,6 +27,14 @@
             color: #666;
             margin-bottom: 30px;
         }
+        .intro, .how-it-works, .advantages, .faq {
+            margin: 40px auto;
+            max-width: 800px;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
         .upload-section {
             margin-top: 30px;
         }
@@ -68,6 +76,26 @@
             50% { transform: translateY(-20px) scale(1.2); }
             100% { transform: translateY(-40px) scale(1); }
         }
+        .advantage {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 200px;
+            margin: 10px auto;
+        }
+        .advantages-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
         a.download-btn {
             display: inline-block;
             margin: 10px;
@@ -82,80 +110,121 @@
 </head>
 <body>
 
-    <header>
-        <h1><b>Easy Free PDF Converter</b></h1>
-        <h2>Convert PDFs to Word, JPG, PPT and Merge - 100% Free</h2>
-    </header>
+<header>
+    <h1><b>Easy Free PDF Converter</b></h1>
+    <h2>Convert PDFs to Word, JPG, PPT and Merge - 100% Free</h2>
+</header>
 
-    <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data" class="upload-section">
-        <label for="file-upload" class="btn-upload">Select Files</label>
-        <input type="file" id="file-upload" name="file" multiple onchange="showFileNames()" hidden>
+<div class="intro">
+    Convert your PDF documents to Word, JPG, PPT formats or merge multiple PDFs into one. Fast, secure, and 100% free. No registration needed, no limitations.
+</div>
 
-        <div class="uploaded-files" id="file-names"></div>
+<form id="upload-form" action="/upload" method="post" enctype="multipart/form-data" class="upload-section">
+    <label for="file-upload" class="btn-upload">Select Files</label>
+    <input type="file" id="file-upload" name="file" multiple onchange="showFileNames()" hidden>
 
-        <div>
-            <select name="operation" id="operation" required>
-                <option value="">-- Select Conversion Type --</option>
-                <option value="pdf_to_word">PDF to Word</option>
-                <option value="word_to_pdf">Word to PDF</option>
-                <option value="ppt_to_pdf">PPT to PDF</option>
-                <option value="jpg_to_pdf">JPG to PDF</option>
-                <option value="merge_pdfs">Merge PDFs</option>
-            </select>
+    <div class="uploaded-files" id="file-names"></div>
+
+    <div>
+        <select name="operation" id="operation" required>
+            <option value="">-- Select Conversion Type --</option>
+            <option value="pdf_to_word">PDF to Word</option>
+            <option value="word_to_pdf">Word to PDF</option>
+            <option value="ppt_to_pdf">PPT to PDF</option>
+            <option value="jpg_to_pdf">JPG to PDF</option>
+            <option value="merge_pdfs">Merge PDFs</option>
+        </select>
+    </div>
+
+    <br>
+    <button type="button" class="btn-convert" onclick="submitForm()">Convert</button>
+</form>
+
+<div id="progress" class="progress" style="display:none;">Converting... Please wait ⏳</div>
+<div id="rocket" class="rocket" style="display:none;">🚀🔥</div>
+<div id="download-links" class="download-links"></div>
+
+<div class="how-it-works">
+    <h3>How it Works</h3>
+    <ol>
+        <li>Upload your PDF or other files.</li>
+        <li>Select the conversion operation you need.</li>
+        <li>Download your converted files instantly.</li>
+    </ol>
+</div>
+
+<div class="advantages">
+    <h3>Advantages</h3>
+    <div class="advantages-container">
+        <div class="advantage">
+            <b>Fast</b><br>Quick conversions without waiting.
         </div>
+        <div class="advantage">
+            <b>Secure</b><br>Your files are never shared.
+        </div>
+        <div class="advantage">
+            <b>Free</b><br>No cost, no hidden fees.
+        </div>
+        <div class="advantage">
+            <b>No Sign-up</b><br>Use freely without registration.
+        </div>
+    </div>
+</div>
 
-        <br>
-        <button type="button" class="btn-convert" onclick="submitForm()">Convert</button>
-    </form>
+<div class="faq">
+    <h3>FAQs</h3>
+    <p><b>Is my file safe?</b><br>Yes, all files are processed securely and deleted automatically after conversion.</p>
+    <p><b>Are there any limits?</b><br>No, you can upload and convert as many files as you need.</p>
+</div>
 
-    <div id="progress" class="progress" style="display:none;">Converting... Please wait ⏳</div>
-    <div id="rocket" class="rocket" style="display:none;">🚀🔥</div>
-    <div id="download-links" class="download-links"></div>
+<footer>
+    © 2025 Easy Free PDF Converter. Built with ❤️ for everyone.
+</footer>
 
-    <script>
-        function showFileNames() {
-            const input = document.getElementById('file-upload');
-            const fileNamesDiv = document.getElementById('file-names');
-            fileNamesDiv.innerHTML = "";
-            for (let i = 0; i < input.files.length; i++) {
-                fileNamesDiv.innerHTML += input.files[i].name + "<br>";
-            }
-        }
+<script>
+function showFileNames() {
+    const input = document.getElementById('file-upload');
+    const fileNamesDiv = document.getElementById('file-names');
+    fileNamesDiv.innerHTML = "";
+    for (let i = 0; i < input.files.length; i++) {
+        fileNamesDiv.innerHTML += input.files[i].name + "<br>";
+    }
+}
 
-        function submitForm() {
-            const form = document.getElementById('upload-form');
-            const progress = document.getElementById('progress');
-            const rocket = document.getElementById('rocket');
-            const downloadLinksDiv = document.getElementById('download-links');
+function submitForm() {
+    const form = document.getElementById('upload-form');
+    const progress = document.getElementById('progress');
+    const rocket = document.getElementById('rocket');
+    const downloadLinksDiv = document.getElementById('download-links');
 
-            progress.style.display = 'block';
-            rocket.style.display = 'none';
-            downloadLinksDiv.innerHTML = '';
+    progress.style.display = 'block';
+    rocket.style.display = 'none';
+    downloadLinksDiv.innerHTML = '';
 
-            const formData = new FormData(form);
+    const formData = new FormData(form);
 
-            fetch('/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(links => {
-                progress.style.display = 'none';
-                rocket.style.display = 'block';
-                downloadLinksDiv.innerHTML = '<h3>Download your converted files:</h3>';
-                links.forEach(link => {
-                    const a = document.createElement('a');
-                    a.href = link;
-                    a.className = 'download-btn';
-                    a.textContent = 'Download';
-                    downloadLinksDiv.appendChild(a);
-                });
-            })
-            .catch(error => {
-                progress.innerHTML = 'Error occurred. Please try again.';
-            });
-        }
-    </script>
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(links => {
+        progress.style.display = 'none';
+        rocket.style.display = 'block';
+        downloadLinksDiv.innerHTML = '<h3>Download your converted files:</h3>';
+        links.forEach(link => {
+            const a = document.createElement('a');
+            a.href = link;
+            a.className = 'download-btn';
+            a.textContent = 'Download';
+            downloadLinksDiv.appendChild(a);
+        });
+    })
+    .catch(error => {
+        progress.innerHTML = 'Error occurred. Please try again.';
+    });
+}
+</script>
 
 </body>
 </html>
