@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://easy-free-pdf-converter.onrender.com/sitemap.xml
