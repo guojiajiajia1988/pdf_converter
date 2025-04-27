@@ -135,6 +135,12 @@ def upload_file():
 @app.route('/sitemap.xml')
 def sitemap():
     return send_from_directory(directory='.', path='sitemap.xml')
-    
+
+# --- 新增：提供 robots.txt 文件 ---
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(directory='.', path='robots.txt')
+
+# --- 启动程序 ---    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)  # or just app.run()
