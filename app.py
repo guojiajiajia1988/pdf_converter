@@ -1,8 +1,7 @@
-from flask import Flask, request, send_file, render_template, send_from_directory
+from flask import Flask, request, send_file, render_template, send_from_directory, jsonify
 import os
 import uuid
 import time
-import zipfile
 from pdf2docx import Converter
 from docx2pdf import convert as docx2pdf_convert
 from PyPDF2 import PdfMerger
@@ -61,7 +60,7 @@ def upload_file():
     operation = request.form.get('operation')
 
     if not files or not operation:
-        return "No file or operation selected."
+        return "No file or operation selected.", 400
 
     task_id = str(uuid.uuid4())
     task_output_folder = os.path.join(OUTPUT_FOLDER, task_id)
@@ -77,7 +76,7 @@ def upload_file():
                 file.save(input_path)
                 saved_files.append(input_path)
             else:
-                return "Only PDF files are allowed for merging."
+                return "Only PDF files are allowed for merging.", 400
 
         output_pdf = os.path.join(task_output_folder, "merged_output.pdf")
         merge_pdfs(saved_files, output_pdf)
@@ -117,17 +116,20 @@ def upload_file():
                 converted_files.append(output_path)
 
             else:
-                return f"Unsupported file format: {file.filename}"
+                return f"Unsupported file format: {file.filename}", 400
 
-    if len(converted_files) == 1:
-        return send_file(converted_files[0], as_attachment=True)
+    # 返回下载链接列表
+    download_links = []
+    for path in converted_files:
+        file_url = f"/download/{task_id}/{os.path.basename(path)}"
+        download_links.append(file_url)
 
-    zip_filename = os.path.join(task_output_folder, "converted_files.zip")
-    with zipfile.ZipFile(zip_filename, 'w') as zipf:
-        for file_path in converted_files:
-            zipf.write(file_path, arcname=os.path.basename(file_path))
+    return jsonify(download_links)
 
-    return send_file(zip_filename, as_attachment=True)
+@app.route('/download/<task_id>/<filename>')
+def download_file(task_id, filename):
+    dir_path = os.path.join(OUTPUT_FOLDER, task_id)
+    return send_from_directory(directory=dir_path, path=filename, as_attachment=True)
 
 @app.route('/sitemap.xml')
 def sitemap():
