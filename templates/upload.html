@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Online PDF Converter - Easy & Fast</title>
-    <meta name="description" content="Convert PDF to Word, Word to PDF, JPG to PDF, PPT to PDF, and merge multiple PDFs easily and securely. 100% Free and No registration required.">
+    <title>Easy Free PDF Converter</title>
+    <meta name="description" content="Convert PDF to Word, JPG, PPT, and merge PDFs easily and securely. 100% Free.">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
     <style>
         body {
@@ -18,25 +18,11 @@
             margin-top: 40px;
         }
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: #333;
-            margin-bottom: 10px;
-        }
-        h2 {
-            font-size: 1.4rem;
-            color: #666;
-            margin-bottom: 40px;
-        }
-        .intro {
-            margin: 20px auto;
-            max-width: 800px;
-            font-size: 1rem;
-            color: #555;
-            line-height: 1.6;
-            padding: 0 20px;
         }
         .upload-section {
-            margin-top: 30px;
+            margin-top: 40px;
         }
         .btn-upload, .btn-convert {
             padding: 15px 40px;
@@ -54,7 +40,7 @@
             background-color: #007bff;
             color: white;
         }
-        .uploaded-files {
+        .uploaded-files, .progress, .download-link, .rocket {
             margin-top: 20px;
             font-size: 1rem;
             color: #555;
@@ -66,44 +52,15 @@
             border-radius: 8px;
             border: 1px solid #ccc;
         }
-        .how-it-works {
-            margin: 60px auto 40px;
-            max-width: 800px;
-            font-size: 1.1rem;
-            line-height: 2;
-            color: #444;
-            padding: 0 20px;
+        .rocket {
+            font-size: 3rem;
+            animation: launch 2s ease forwards;
+            color: red;
         }
-        .advantages {
-            margin: 40px auto;
-            max-width: 800px;
-            font-size: 1rem;
-            color: #555;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-        .advantage {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            width: 200px;
-        }
-        .faq {
-            margin: 60px auto;
-            max-width: 800px;
-            text-align: left;
-            font-size: 1rem;
-            padding: 0 20px;
-            color: #555;
-        }
-        footer {
-            margin-top: 50px;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: #aaa;
+        @keyframes launch {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px) scale(1.2); }
+            100% { transform: translateY(-40px) scale(1); }
         }
     </style>
 </head>
@@ -111,21 +68,16 @@
 
     <header>
         <h1><b>Easy Free PDF Converter</b></h1>
-        <h2>Convert PDFs to Word, JPG, PPT and Merge - 100% Free</h2>
     </header>
 
-    <div class="intro">
-        Convert your PDF documents to Word, JPG, PPT formats or merge multiple PDFs into one. Fast, secure, and 100% free. No registration needed, no limitations.
-    </div>
-
-    <form action="/upload" method="post" enctype="multipart/form-data" class="upload-section">
+    <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data" class="upload-section">
         <label for="file-upload" class="btn-upload">Select Files</label>
         <input type="file" id="file-upload" name="file" multiple onchange="showFileNames()" hidden>
 
         <div class="uploaded-files" id="file-names"></div>
 
         <div>
-            <select name="operation" required>
+            <select name="operation" id="operation" required>
                 <option value="">-- Select Conversion Type --</option>
                 <option value="pdf_to_word">PDF to Word</option>
                 <option value="word_to_pdf">Word to PDF</option>
@@ -136,42 +88,12 @@
         </div>
 
         <br>
-        <button type="submit" class="btn-convert">Convert</button>
+        <button type="button" class="btn-convert" onclick="submitForm()">Convert</button>
     </form>
 
-    <div class="how-it-works">
-        <h3>How it Works</h3>
-        <ol>
-            <li>Upload your PDF or other files.</li>
-            <li>Select the conversion operation you need.</li>
-            <li>Download your converted files instantly.</li>
-        </ol>
-    </div>
-
-    <div class="advantages">
-        <div class="advantage">
-            <b>Fast</b><br>Quick conversions without waiting.
-        </div>
-        <div class="advantage">
-            <b>Secure</b><br>Your files are never shared.
-        </div>
-        <div class="advantage">
-            <b>Free</b><br>No cost, no hidden fees.
-        </div>
-        <div class="advantage">
-            <b>No Sign-up</b><br>Use freely without registration.
-        </div>
-    </div>
-
-    <div class="faq">
-        <h3>FAQs</h3>
-        <p><b>Is my file safe?</b><br>Yes, all files are processed securely and deleted automatically after conversion.</p>
-        <p><b>Are there any limits?</b><br>No, you can upload and convert as many files as you need.</p>
-    </div>
-
-    <footer>
-        © 2025 Easy Free PDF Converter. Built with ❤️ for everyone.
-    </footer>
+    <div id="progress" class="progress" style="display:none;">Converting... Please wait ⏳</div>
+    <div id="rocket" class="rocket" style="display:none;">🚀🔥</div>
+    <div id="download-link" class="download-link"></div>
 
     <script>
         function showFileNames() {
@@ -181,6 +103,34 @@
             for (let i = 0; i < input.files.length; i++) {
                 fileNamesDiv.innerHTML += input.files[i].name + "<br>";
             }
+        }
+
+        function submitForm() {
+            const form = document.getElementById('upload-form');
+            const progress = document.getElementById('progress');
+            const rocket = document.getElementById('rocket');
+            const downloadLink = document.getElementById('download-link');
+
+            progress.style.display = 'block';
+            rocket.style.display = 'none';
+            downloadLink.innerHTML = '';
+
+            const formData = new FormData(form);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                progress.style.display = 'none';
+                rocket.style.display = 'block';
+                const url = window.URL.createObjectURL(blob);
+                downloadLink.innerHTML = `<a href="${url}" download="converted_files.zip" style="color: red; font-weight: bold; font-size: 1.2rem;">⬇️ Download Your Files</a>`;
+            })
+            .catch(error => {
+                progress.innerHTML = 'Error occurred. Please try again.';
+            });
         }
     </script>
 
