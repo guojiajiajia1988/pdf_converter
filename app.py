@@ -7,6 +7,7 @@ from pdf2docx import Converter
 from docx2pdf import convert as docx2pdf_convert
 from PyPDF2 import PdfMerger
 from PIL import Image
+from flask import send_from_directory
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -129,8 +130,7 @@ def upload_file():
                 zipf.write(file_path, arcname=os.path.basename(file_path))
 
         return send_file(zip_filename, as_attachment=True)
-from flask import send_from_directory
-
+        
 # --- 新增：提供 sitemap.xml 文件 ---
 @app.route('/sitemap.xml')
 def sitemap():
