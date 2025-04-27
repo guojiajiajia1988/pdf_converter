@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Online PDF Converter - Easy & Fast</title>
-    <meta name="description" content="Convert PDF to Word, Word to PDF, JPG to PDF, PPT to PDF, Merge PDFs online easily and quickly. 100% free and secure.">
+    <meta name="description" content="Convert PDF to Word, Word to PDF, JPG to PDF, PPT to PDF, and merge multiple PDFs easily and securely. 100% Free and No registration required.">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
     <style>
         body {
@@ -26,6 +26,14 @@
             font-size: 1.4rem;
             color: #666;
             margin-bottom: 40px;
+        }
+        .intro {
+            margin: 20px auto;
+            max-width: 800px;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+            padding: 0 20px;
         }
         .upload-section {
             margin-top: 30px;
@@ -58,11 +66,38 @@
             border-radius: 8px;
             border: 1px solid #ccc;
         }
-        .description {
-            margin: 50px 20px;
+        .how-it-works {
+            margin: 60px auto 40px;
+            max-width: 800px;
+            font-size: 1.1rem;
+            line-height: 2;
+            color: #444;
+            padding: 0 20px;
+        }
+        .advantages {
+            margin: 40px auto;
+            max-width: 800px;
             font-size: 1rem;
-            color: #666;
-            line-height: 1.6;
+            color: #555;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .advantage {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 200px;
+        }
+        .faq {
+            margin: 60px auto;
+            max-width: 800px;
+            text-align: left;
+            font-size: 1rem;
+            padding: 0 20px;
+            color: #555;
         }
         footer {
             margin-top: 50px;
@@ -76,8 +111,12 @@
 
     <header>
         <h1><b>Easy Free PDF Converter</b></h1>
-        <h2>Convert PDFs to Word, JPG, PPT, Merge and more - 100% Free Online</h2>
+        <h2>Convert PDFs to Word, JPG, PPT and Merge - 100% Free</h2>
     </header>
+
+    <div class="intro">
+        Convert your PDF documents to Word, JPG, PPT formats or merge multiple PDFs into one. Fast, secure, and 100% free. No registration needed, no limitations.
+    </div>
 
     <form action="/upload" method="post" enctype="multipart/form-data" class="upload-section">
         <label for="file-upload" class="btn-upload">Select Files</label>
@@ -100,12 +139,38 @@
         <button type="submit" class="btn-convert">Convert</button>
     </form>
 
-    <div class="description">
-        Easily convert your PDF documents into Word, JPG, PPT formats, or merge multiple PDFs into one file. 100% Free, No registration needed, Fast & Secure conversion. Start converting now!
+    <div class="how-it-works">
+        <h3>How it Works</h3>
+        <ol>
+            <li>Upload your PDF or other files.</li>
+            <li>Select the conversion operation you need.</li>
+            <li>Download your converted files instantly.</li>
+        </ol>
+    </div>
+
+    <div class="advantages">
+        <div class="advantage">
+            <b>Fast</b><br>Quick conversions without waiting.
+        </div>
+        <div class="advantage">
+            <b>Secure</b><br>Your files are never shared.
+        </div>
+        <div class="advantage">
+            <b>Free</b><br>No cost, no hidden fees.
+        </div>
+        <div class="advantage">
+            <b>No Sign-up</b><br>Use freely without registration.
+        </div>
+    </div>
+
+    <div class="faq">
+        <h3>FAQs</h3>
+        <p><b>Is my file safe?</b><br>Yes, all files are processed securely and deleted automatically after conversion.</p>
+        <p><b>Are there any limits?</b><br>No, you can upload and convert as many files as you need.</p>
     </div>
 
     <footer>
-        © 2025 Easy Free PDF Converter. All rights reserved.
+        © 2025 Easy Free PDF Converter. Built with ❤️ for everyone.
     </footer>
 
     <script>
